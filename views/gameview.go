@@ -22,14 +22,39 @@ func NewGameView() *GameView {
 }
 
 func (v *GameView) Update() {
+	
 	spacebarPressed := ebiten.IsKeyPressed(ebiten.KeySpace)
 	if spacebarPressed && !v.SpacebarLastFrame {
-		v.Arrows = append(v.Arrows, models.NewArrow())
+		newArrow := models.NewArrow()
+		newArrow.FireStraight()
+		v.Arrows = append(v.Arrows, newArrow)
 	}
 	v.SpacebarLastFrame = spacebarPressed
 
+	
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		for _, arrow := range v.Arrows {
+			arrow.SetDirection(-1, 0)
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyRight) {
+		for _, arrow := range v.Arrows {
+			arrow.SetDirection(1, 0)
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyUp) {
+		for _, arrow := range v.Arrows {
+			arrow.SetDirection(0, -1)
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyDown) {
+		for _, arrow := range v.Arrows {
+			arrow.SetDirection(0, 1)
+		}
+	}
+
 	for _, arrow := range v.Arrows {
-		arrow.Move(v.Targets)
+		arrow.Move()
 	}
 
 	for _, arrow := range v.Arrows {
